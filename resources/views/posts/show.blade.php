@@ -14,6 +14,25 @@
             </div>
         </div>
 
+        <div class="mb-4 flex items-center justify-between">
+            <!-- いいねボタンといいね解除ボタン -->
+            @if (Auth::user()->likedPosts()->where('post_id', $post->id)->exists())
+                <form action="/unlike/{{ $post->id }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="flex items-center text-red-500 hover:text-red-700 transition ease-in-out duration-150">
+                        <i class="fas fa-heart mr-2"></i>いいね解除
+                    </button>
+                </form>
+            @else
+                <form action="/like/{{ $post->id }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="flex items-center text-gray-500 hover:text-red-500 transition ease-in-out duration-150">
+                        <i class="far fa-heart mr-2"></i>いいね
+                    </button>
+                </form>
+            @endif
+        </div>
+
         <div class="comments mb-8">
             <h3 class="text-2xl font-semibold text-gray-700 mb-6">コメント</h3>
 
@@ -32,8 +51,7 @@
                                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>{{ old('comment.body') }}</textarea>
                     </div>
                     <div>
-                        <button type="submit" 
-                                class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">コメントを投稿</button>
+                        <button type="submit" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">コメントを投稿</button>
                     </div>
                 </form>
             </div>
@@ -55,6 +73,11 @@
                                 <div class="edit-comment text-right">
                                     <a href="/posts/{{ $post->id }}/comments/{{ $comment->id }}/edit" 
                                        class="text-blue-500 hover:underline">編集</a>
+                                    <form action="/posts/{{ $post->id }}/comments/{{ $comment->id }}" id="comment_form_{{ $comment->id }}" method="post" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" onclick="deleteComment({{ $comment->id }})" class="text-red-500 hover:text-red-700 transition ease-in-out duration-150">削除</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -67,4 +90,13 @@
             <a href="/posts" class="text-blue-500 hover:underline">戻る</a>
         </div>
     </div>
+    <script>
+        function deleteComment(id) {
+            'use strict'
+    
+            if (confirm('削除すると復元できません。\n本当に削除しますか？')) {
+                document.getElementById(`comment_form_${id}`).submit();
+            }
+        }
+    </script>
 </x-app-layout>

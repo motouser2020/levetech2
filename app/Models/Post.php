@@ -21,12 +21,33 @@ class Post extends Model
 
     public function getPaginateByLimit(int $limit_count = 5)
     {
-         return $this->orderBy('updated_at', 'DESC')->paginate($limit_count);
+        return $this->orderBy('updated_at', 'DESC')->paginate($limit_count);
     }
     
     // コメントとのリレーションを定義
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+    public function users() 
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function likedByUsers()     
+    {
+        return $this->belongsToMany(User::class, 'likes')->withTimestamps();
+    }
+    
+    // いいねの数を取得するアクセサ
+    public function getLikesCountAttribute()
+    {
+        return $this->likedByUsers()->count();
+    }
+    
+    // コメントの数を取得するアクセサ
+    public function getCommentsCountAttribute()
+    {
+        return $this->comments()->count();
     }
 }

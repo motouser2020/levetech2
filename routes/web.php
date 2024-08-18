@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,8 +39,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/{comment}', [CommentController::class, 'show'])->name('comments.show'); // コメント詳細
         Route::get('/{comment}/edit', [CommentController::class, 'edit'])->name('comments.edit'); // コメント詳細
         Route::put('/{comment}', [CommentController::class, 'update'])->name('comments.update'); // コメント更新
-        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy'); // コメント削除
+        Route::delete('/{comment}', [CommentController::class, 'delete'])->name('comments.destroy'); // コメント削除
     });
+    
+    
+    Route::post('/like/{post}', [LikeController::class, 'like'])->name('like');
+    Route::post('/unlike/{post}', [LikeController::class, 'unlike'])->name('unlike');
     
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
