@@ -51,7 +51,7 @@ class PostController extends Controller
     public function delete(Post $post)
     {
         $post->delete();
-        return redirect('/');
+        return redirect('/posts');
     }
     
     public function favorite(Request $request, Article $article)

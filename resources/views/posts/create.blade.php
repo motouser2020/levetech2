@@ -22,7 +22,7 @@
             </div>
         </form>
         <div class="mt-6 text-center">
-            <a href="/" class="text-blue-500 hover:underline">戻る</a>
+            <a href="/posts" class="text-blue-500 hover:underline">戻る</a>
         </div>
     </div>
 </x-app-layout>
