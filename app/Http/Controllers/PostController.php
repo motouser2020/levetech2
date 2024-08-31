@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -29,8 +30,7 @@ class PostController extends Controller
     public function store(PostRequest $request, Post $post)
     {
         $input = $request['post'];
-        $input['user_id'] = 1;
-        $input['stars'] = 4;
+        $input['user_id'] = Auth::id();
         $post->fill($input)->save();
         return redirect('/posts/' . $post->id);
     }

@@ -1,38 +1,49 @@
 <x-app-layout>
-    <div class="max-w-4xl mx-auto mt-10 p-8 bg-white shadow-lg rounded-lg">
-        <h1 class="text-4xl font-bold text-gray-800 mb-6">
-            {{ $post->title }}
-        </h1>
-        
-        <div class="content mb-8">
-            <div class="content_post mb-6">
-                <h3 class="text-2xl font-semibold text-gray-700 mb-4">本文</h3>
-                <div class="edit mb-4">
-                    <a href="/posts/{{ $post->id }}/edit" class="text-blue-500 hover:underline">編集</a>
-                </div>
-                <p class="text-gray-700 leading-relaxed">{{ $post->body }}</p>
+    <div class="max-w-4xl mx-auto mt-10 p-8 bg-white shadow-lg rounded-lg relative">
+        <!-- 編集ボタン -->
+        <div class="absolute top-4 right-4">
+            <a href="/posts/{{ $post->id }}/edit" class="text-gray-500 hover:text-gray-700 transition ease-in-out duration-150">
+                <i class="fas fa-edit fa-lg">編集</i>
+            </a>
+        </div>
+
+        <!-- 投稿の表示 -->
+        <div class="mb-8 border-b border-gray-300 pb-6">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">{{ $post->title }}</h1>
+
+            <!-- 評価の表示 -->
+            <div class="flex items-center mb-4">
+                @for ($i = 1; $i <= 5; $i++)
+                    <svg class="w-8 h-8 {{ $post->stars >= $i ? 'text-yellow-500' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 .587l3.668 7.431L23.1 9.748l-5.775 5.623L18.905 24 12 19.763 5.095 24l1.58-8.629L.9 9.748l7.432-1.73L12 .587z" />
+                    </svg>
+                @endfor
+            </div>
+
+            <!-- 本文 -->
+            <p class="text-gray-700 leading-relaxed mb-4">{{ $post->body }}</p>
+
+            <div class="mb-4 flex items-center justify-between">
+                <!-- いいねボタンといいね解除ボタン -->
+                @if (Auth::user()->likedPosts()->where('post_id', $post->id)->exists())
+                    <form action="/unlike/{{ $post->id }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="flex items-center text-red-500 hover:text-red-700 transition ease-in-out duration-150">
+                            <i class="fas fa-heart mr-2"></i>いいね解除
+                        </button>
+                    </form>
+                @else
+                    <form action="/like/{{ $post->id }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="flex items-center text-gray-500 hover:text-red-500 transition ease-in-out duration-150">
+                            <i class="far fa-heart mr-2"></i>いいね
+                        </button>
+                    </form>
+                @endif
             </div>
         </div>
 
-        <div class="mb-4 flex items-center justify-between">
-            <!-- いいねボタンといいね解除ボタン -->
-            @if (Auth::user()->likedPosts()->where('post_id', $post->id)->exists())
-                <form action="/unlike/{{ $post->id }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="flex items-center text-red-500 hover:text-red-700 transition ease-in-out duration-150">
-                        <i class="fas fa-heart mr-2"></i>いいね解除
-                    </button>
-                </form>
-            @else
-                <form action="/like/{{ $post->id }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="flex items-center text-gray-500 hover:text-red-500 transition ease-in-out duration-150">
-                        <i class="far fa-heart mr-2"></i>いいね
-                    </button>
-                </form>
-            @endif
-        </div>
-
+        <!-- コメントの表示 -->
         <div class="comments mb-8">
             <h3 class="text-2xl font-semibold text-gray-700 mb-6">コメント</h3>
 
@@ -86,9 +97,13 @@
             </div>
         </div>
 
-        <div class="footer text-center mt-10">
-            <a href="/posts" class="text-blue-500 hover:underline">戻る</a>
+        <div class="footer mt-10">
+            <a href="/posts" class="block w-full text-center px-6 py-4 bg-gray-200 text-gray-800 font-semibold rounded-md hover:bg-gray-300 transition ease-in-out duration-150">
+                戻る
+            </a>
         </div>
+
+
     </div>
     <script>
         function deleteComment(id) {
