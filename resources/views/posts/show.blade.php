@@ -81,13 +81,20 @@
                                 <p class="text-gray-700 mb-4">{{ $comment->body }}</p>
                                 <p class="text-sm text-gray-500 mb-2">投稿者: {{ $comment->user->name }}</p>
                                 <p class="text-sm text-gray-500 mb-4">投稿日: {{ $comment->created_at }}</p>
-                                <div class="edit-comment text-right">
+                                <div class="edit-comment text-right space-x-2">
+                                    <!-- 編集ボタン -->
                                     <a href="/posts/{{ $post->id }}/comments/{{ $comment->id }}/edit" 
-                                       class="text-blue-500 hover:underline">編集</a>
+                                       class="inline-block px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition ease-in-out duration-150">
+                                        編集
+                                    </a>
+                                    <!-- 削除ボタン -->
                                     <form action="/posts/{{ $post->id }}/comments/{{ $comment->id }}" id="comment_form_{{ $comment->id }}" method="post" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" onclick="deleteComment({{ $comment->id }})" class="text-red-500 hover:text-red-700 transition ease-in-out duration-150">削除</button>
+                                        <button type="button" onclick="deleteComment({{ $comment->id }})" 
+                                                class="inline-block px-4 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition ease-in-out duration-150">
+                                            削除
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -95,6 +102,7 @@
                     @endforeach
                 @endif
             </div>
+
         </div>
 
         <div class="footer mt-10">

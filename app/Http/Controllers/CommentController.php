@@ -6,6 +6,7 @@ use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -26,10 +27,10 @@ class CommentController extends Controller
     public function store(Request $request, Post $post, Comment $comment)
     {
         $input = $request['comment'];
-        $input['user_id'] = 1;
+        $input['user_id'] = Auth::id();;
         $input['post_id'] = $post->id;
         $comment->fill($input)->save();
-        return redirect('posts/' . $post->id . '/comments/' . $comment->id . '/edit');
+        return redirect('posts/' . $post->id);
     }
     
     public function edit(Post $post, Comment $comment)
@@ -43,7 +44,7 @@ class CommentController extends Controller
     public function update(Request $request, Post $post, Comment $comment)
     {
         $input = $request['comment'];
-        $input['user_id'] = 1;
+        $input['user_id'] = Auth::id();;
         $comment->fill($input)->save();
 
         return redirect('posts/' . $post->id);

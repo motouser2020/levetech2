@@ -41,6 +41,12 @@
                 </div>
             </form>
         </div>
+        
+        <div class="footer mt-10">
+            <a href="{{ route('posts.show', $post->id) }}" class="block w-full text-center px-6 py-4 bg-gray-200 text-gray-800 font-semibold rounded-md hover:bg-gray-300 transition ease-in-out duration-150">
+                戻る
+            </a>
+        </div>
     </div>
 
     <!-- JavaScript for star rating -->
